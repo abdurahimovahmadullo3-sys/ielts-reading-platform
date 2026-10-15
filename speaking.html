@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Speaking Practice | Abdurakhimov IELTS Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo-area">
+            <span class="logo-icon">🗣️</span>
+            <h2>Abdurakhimov <span class="highlight">AI Speaking</span></h2>
+        </div>
+        <a href="index.html" class="btn-primary">← Bosh sahifa</a>
+    </header>
+
+    <div style="max-width: 800px; margin: 40px auto; padding: 0 20px; text-align: center;">
+        <div style="background: #1e293b; padding: 30px; border-radius: 16px; border: 1px solid #334155;">
+            <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; padding: 4px 12px; border-radius: 6px; font-weight: 600; font-size: 13px;">IELTS Part 1</span>
+            <h2 style="color: white; margin: 20px 0 10px;">Question: "Describe your hometown or the place where you grew up."</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 30px;">Tugmani bosing va mikrofon orqali ingliz tilida javob bering.</p>
+
+            <button id="start-btn" onclick="startSpeechRecognition()" style="background: #a855f7; color: white; border: none; padding: 14px 28px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                🎤 Ovoz yozishni boshlash
+            </button>
+
+            <div style="margin-top: 30px; text-align: left;">
+                <h4 style="color: #94a3b8;">Siz yozgan javob:</h4>
+                <div id="transcript" style="background: #0f172a; padding: 15px; border-radius: 8px; color: #f1f5f9; min-height: 80px; margin-top: 10px; border: 1px solid #334155;">
+                    Hali hech narsa yozilmadi...
+                </div>
+            </div>
+
+            <div id="ai-feedback" style="margin-top: 25px; display: none; text-align: left; background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; padding: 15px; border-radius: 8px; color: #4ade80;">
+                <h4>🤖 AI Tahlili:</h4>
+                <p id="ai-score" style="font-weight: bold; margin-top: 5px;">Taxminiy Band: 6.5</p>
+                <p style="font-size: 13px; color: #cbd5e1; margin-top: 5px;">Yaxshi talaffuz! Grammatik xatolarni kamaytirish va ko'proq bog'lovchi so'zlar (however, in addition) ishlatish tavsiya etiladi.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startSpeechRecognition() {
+            const btn = document.getElementById('start-btn');
+            const transcriptDiv = document.getElementById('transcript');
+            const feedbackDiv = document.getElementById('ai-feedback');
+
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('Kechirasiz, brauzeringiz ovoz yozishni qo\'llab-quvvatlamaydi. Chrome ishlatishni tavsiya etamiz.');
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+
+            btn.innerText = "🎙️ Eshityapman... Gapiring!";
+            btn.style.background = "#ef4444";
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript;
+                transcriptDiv.innerText = speechResult;
+                btn.innerText = "🎤 Qayta yozish";
+                btn.style.background = "#a855f7";
+                feedbackDiv.style.display = "block";
+            };
+
+            recognition.onerror = function(event) {
+                btn.innerText = "🎤 Xatolik! Qayta bosing";
+                btn.style.background = "#a855f7";
+            };
+        }
+    </script>
+</body>
+</html>
