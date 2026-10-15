@@ -1,0 +1,2350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Full Reading Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            line-height: 1.4;
+            font-size: 16px;
+        }
+
+
+
+        .header {
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .ielts-logo {
+            display: none;
+        }
+
+        .test-info {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .audio-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .audio-icon {
+            width: 16px;
+            height: 16px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>') no-repeat center;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .telegram-link {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .telegram-link:hover {
+            text-decoration: underline;
+        }
+
+        .telegram-link::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: currentColor;
+            -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23l7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3L3.64 12c-.88-.25-.89-1.37.2-1.64l16.56-6.4c.75-.29 1.4.22 1.2.94l-2.67 12.61c-.22.95-1.13 1.18-1.78.73l-4.5-3.32l-2.23 2.15c-.47.44-1.29.21-1.48-.37z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        #volume-slider {
+            -webkit-appearance: none;
+            width: 80px;
+            height: 4px;
+            background: #ddd;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+        }
+
+        #volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+            border: none;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon:hover {
+            opacity: 1;
+        }
+        
+        #play-pause-btn {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .main-container {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            height: calc(100vh - 60px); /* Full height minus header */
+        }
+
+        .panels-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .passage-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px; /* Minimum width */
+        }
+
+        /* Passage Content */
+        .text-center {
+            text-align: center;
+        }
+        .reading-passage h4 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+       
+        .reading-passage p {
+            margin-bottom: 1.2em;
+        }
+
+        .question ul li label {
+            display: block;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        .questions-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px; /* Minimum width */
+            border-left: 1px solid #e0e0e0;
+        }
+
+        .resizer {
+            width: 10px;
+            cursor: col-resize;
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="30" viewBox="0 0 10 30"><path d="M4 11h2v2H4zM4 15h2v2H4zM4 19h2v2H4z" fill="%23888"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+
+        /* Left Panel */
+        .left-panel {
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            display: none;
+            width: 50%;
+            padding: 20px;
+            position: relative;
+        }
+
+        .help-button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .help-button:hover {
+            background: #357abd;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .people-section {
+            margin-bottom: 30px;
+        }
+
+        .people-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        .people-table th {
+            text-align: left;
+            padding: 10px;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+
+        .people-table td {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+        }
+
+        .person-name {
+            font-size: 16px;
+        }
+
+        .question-number {
+            background: white;
+            border: 1px solid #4a90e2;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #4a90e2;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .assigned-responsibility {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+
+        .responsibilities-section {
+            margin-bottom: 30px;
+        }
+
+        .responsibility-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .responsibility-item {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .responsibility-item:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .responsibility-item.dragging {
+            opacity: 0.5;
+        }
+
+        .questions-section {
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .instruction {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Map Styles */
+        .map-container {
+            position: relative;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .map-svg {
+            border: 2px solid #333;
+            background: white;
+        }
+
+        .map-room {
+            fill: #f9f9f9;
+            stroke: #333;
+            stroke-width: 1;
+        }
+
+        .map-text {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            text-anchor: middle;
+            fill: #333;
+        }
+
+        .map-number {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-anchor: middle;
+            fill: #333;
+        }
+
+        .room-labels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .room-label {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .room-label:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .room-label.dragging {
+            opacity: 0.5;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrows {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            display: flex;
+            gap: 5px;
+            z-index: 101;
+        }
+
+        .nav-arrow {
+            width: 50px;
+            height: 50px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-arrow:hover {
+            background: #555;
+        }
+
+        .nav-arrow:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Bottom Navigation - Exact Match */
+        .nav-row {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+
+            padding: 0;
+            display: flex;
+            align-items: center;
+            height: 80px;
+            z-index: 100;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .nav-row::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-row::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 2px;
+        }
+
+        .footer__questionWrapper___1tZ46 {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+
+        .footer__questionNo___3WNct {
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .footer__questionNo___3WNct:hover {
+            background-color: #f8f9fa;
+        }
+
+        .section-prefix {
+            font-size: 16px;
+        }
+
+        .sectionNr {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .attemptedCount {
+            font-size: 14px;
+            color: #666;
+            margin-left: 5px;
+            font-weight: 400; /* Normal weight */
+        }
+
+        @media (max-width: 768px) {
+            .attemptedCount {
+                display: none;
+            }
+        }
+
+        .footer__questionWrapper___1tZ46.selected .attemptedCount {
+            display: none;
+        }
+
+        .footer__subquestionWrapper___9GgoP {
+            display: none;
+            gap: 2px;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .footer__questionWrapper___1tZ46.selected .footer__subquestionWrapper___9GgoP {
+            display: flex;
+        }
+
+        .subQuestion {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .subQuestion.answered {
+            background-color: #e9ecef;
+            border-color: #ddd;
+        }
+        .subQuestion.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        .subQuestion.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .subQuestion:hover {
+            background-color: #f0f0f0;
+            border-color: #999;
+        }
+
+        .subQuestion.active {
+            background-color: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .subQuestion.completed {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .footer__deliverButton___3FM07 {
+            margin-left: auto;
+            margin-right: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s, border-color 0.2s;
+            min-width: 170px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .footer__deliverButton___3FM07:hover {
+            background-color: #e0e0e0;
+            border-color: #bbb;
+        }
+
+        .footer__deliverButton___3FM07:disabled {
+            background: #e9ecef;
+            color: #6c757d;
+            cursor: not-allowed;
+            border-color: #ddd;
+        }
+
+        .fa-check::before {
+            content: "✓";
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Context Menu */
+        .context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            min-width: 140px;
+        }
+
+        .context-menu-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .context-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .highlight {
+            background-color: #ffff00;
+        }
+
+        .comment-highlight {
+            background-color: #90EE90;
+            position: relative;
+            cursor: help;
+        }
+
+        .comment-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .comment-highlight:hover .comment-tooltip {
+            opacity: 1;
+        }
+
+        .question {
+            margin-bottom: 40px;
+        }
+        .question p {
+            margin-bottom: 10px;
+        }
+        .question ul, .question .people-table {
+            margin-top: 0;
+        }
+        .question-prompt {
+            margin-bottom: 20px;
+        }
+        .question ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .question ul li {
+            margin-bottom: 5px;
+        }
+        .answer-input {
+            border: 1px solid #888;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 2px 5px;
+            font-size: 16px;
+            text-align: center;
+            margin-right: 4px;
+            margin-left: 4px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            height: 28px; /* Standard height */
+            width: 150px; /* Standard width */
+        }
+        .answer-input.active-input {
+            border-color: #4a90e2;
+            box-shadow: 0 0 3px 1px rgba(74, 144, 226, 0.5);
+        }
+        .answer-input::placeholder {
+            color: #999;
+            font-weight: bold;
+            text-align: center;
+        }
+        .answer-input.correct {
+            border-color: #28a745;
+            background-color: #e9f7ef;
+        }
+        .answer-input.incorrect {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .answer-input {
+    z-index: 10;
+    position: relative;
+    pointer-events: auto;
+}
+        .drag-drop-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            align-items: flex-start;
+        }
+        .recommendations-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            min-height: 200px;
+        }
+        .drag-item {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: move;
+            font-size: 16px;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .drag-item:hover {
+            background: #e9ecef;
+        }
+        .drag-item.dragging {
+            opacity: 0.5;
+        }
+        .drag-item.selected {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5);
+        }
+        .drop-zone {
+            border: 2px dashed #aaa;
+            border-radius: 4px;
+            width: 50%;
+            margin-top: 19px;
+            margin-bottom: 5px;
+            transition: background-color 0.2s, border-color 0.2s;
+            padding: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .drop-zone.drag-over {
+            background-color: #e6f4ff;
+            border-color: #4a90e2;
+        }
+        .drop-zone.correct {
+            background-color: #e9f7ef;
+            border-color: #28a745;
+            border-style: solid;
+        }
+        .drop-zone.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            border-style: solid;
+        }
+        .drop-zone.disabled {
+            pointer-events: none;
+        }
+        .drop-zone .drag-item {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            padding: 2px;
+        }
+        .drag-options-container {
+            margin-top: 10px;
+        }
+        .drag-options-container .drag-item {
+            display: block;
+            width: fit-content;
+            font-size: 15px;
+            padding: 0.5px 10px;
+            margin-bottom: 5px;
+        }
+        .drag-options-container .drag-item:last-child {
+            margin-bottom: 0;
+        }
+        .q-number {
+            color: #888;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .questions-container {
+            width: 100%;
+        }
+        audio {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .part-header {
+            background-color: #f1f2ec;
+            padding: 15px 20px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+            margin: 10px 20px;
+            border-radius: 5px;
+        }
+        .part-header p {
+            margin: 0;
+        }
+        .part-header p:first-child {
+            margin-bottom: 5px;
+        }
+
+        .question li.correct {
+            color: #155724;
+            font-weight: bold;
+        }
+        .question li.incorrect {
+            color: #721c24;
+        }
+        .question li.correct::before {
+            content: '✔ ';
+            color: #28a745;
+        }
+        .question li.incorrect::before {
+            content: '✖ ';
+            color: #dc3545;
+        }
+
+        .example-box {
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .timer-container {
+            display: flex;
+            position: relative;
+            cursor: default;
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            align-items: center;
+        }
+        .timer-container .timer-tooltip {
+            display: none;
+        }
+
+        .timer-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .timer-controls button {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            padding: 0;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        .timer-controls button:hover {
+            background: #e0e0e0;
+        }
+
+        .timer-controls button svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        .audio-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(40, 40, 40, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        .audio-modal-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 500px;
+            padding: 20px;
+        }
+        .audio-modal-content p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #eee;
+        }
+        .audio-modal-icon {
+            margin-bottom: 20px;
+        }
+        .modal-play-btn {
+            background-color: #000;
+            color: white;
+            border: 1px solid white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+        .modal-play-btn:hover {
+            background-color: #333;
+        }
+        #goto-widget {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #goto-input {
+            width: 80px;
+            padding: 4px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #goto-btn {
+            padding: 4px 10px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Styles for TRUE/FALSE/NOT GIVEN questions */
+        .tf-question {
+            margin-bottom: 25px;
+            padding: 10px 0px;
+            border-radius: 4px;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .tf-question-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 5px 0px;
+            border-radius: 4px;
+        }
+        .tf-question-number, .question-number-box {
+            border: 2px solid #ccc;
+            padding: 2px 8px;
+            margin-right: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            transition: border-color 0.3s;
+            display: inline-block;
+        }
+        .tf-question-text {
+            padding-top: 3px;
+        }
+        .tf-options {
+            padding-left: 5px;
+        }
+        .tf-option {
+            display: block;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .tf-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .tf-question.correct .tf-question-line {
+            background-color: #e9f7ef;
+        }
+        .tf-question.incorrect .tf-question-line {
+            background-color: #f8d7da;
+        }
+        .matching-question-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .matching-options-bank {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .matching-questions {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .matching-question-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            border: 2px solid transparent;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        .matching-question-item > span {
+            flex: 1;
+        }
+        .matching-question-item.correct {
+            background-color: #e9f7ef;
+            border-color: #28a745 !important;
+        }
+        .matching-question-item.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545 !important;
+        }
+        .matching-question-item .drop-zone {
+            width: 200px;
+            flex-shrink: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #aaa;
+        }
+        .matching-options-bank .drag-item {
+            font-size: 15px;
+            text-align: center;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+
+        .questions-panel {
+            flex: 1;
+            padding: 20px 20px 100px;
+            overflow-y: auto;
+            min-width: 200px; /* Minimum width */
+            border-left: 1px solid #e0e0e0;
+        }
+        .matching-question-item.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545 !important;
+        }
+        .summary-completion-container {
+            margin-top: 20px;
+        }
+        .summary-text p {
+            line-height: 2.5;
+            font-size: 16px;
+        }
+        .summary-drop-zone {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            max-width:200px;
+            height: 25px;
+            border: 2px dashed #999;
+            border-radius: 4px;
+            margin: 0 5px;
+            padding: 0 5px;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+            color: #aaa;
+            font-weight: bold;
+        }
+        .summary-drop-zone.filled {
+            border-color: #4a90e2;
+        }
+        .summary-drop-zone.active-input {
+             border-color: #4a90e2;
+             box-shadow: none;
+        }
+        .summary-drop-zone .drag-item {
+            font-size: 15px;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .summary-options-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .summary-options-bank .drag-item {
+            flex-grow: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+        .multi-choice-question {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 3px solid transparent;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .multi-choice-option {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .multi-choice-option label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .multi-choice-option input[type="checkbox"],
+        .multi-choice-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.3);
+            accent-color: #4a90e2;
+        }
+        .multi-choice-option.correct {
+            background-color: #e9f7ef;
+        }
+        .multi-choice-option.incorrect {
+            background-color: #f8d7da;
+        }
+        .matching-question-item.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545 !important;
+        }
+        .matching-question-item .drop-zone.filled {
+            border-color: #4a90e2;
+        }
+        .matching-question-item .drop-zone {
+            width: 200px;
+            height: 40px;
+        }
+        .paragraph-matching-question {
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        .paragraph-matching-question .answer-input {
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .matching-form-container {
+            margin-top: 20px;
+        }
+        .matching-form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .matching-form-label {
+            width: 180px;
+            flex-shrink: 0;
+        }
+
+        /* Results Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.hidden {
+            display: none;
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #888;
+        }
+        .modal-content h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .results-summary {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .results-details-container {
+            overflow-y: auto;
+            padding-right: 10px; /* For scrollbar */
+        }
+        .result-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 1fr;
+            gap: 15px;
+            padding: 8px 5px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px;
+        }
+        .result-row.incorrect {
+            background-color: #f8d7da;
+        }
+        .result-row .q-num {
+            font-weight: bold;
+        }
+        .result-row .user-ans {
+            color: #555;
+        }
+        .result-row .correct-ans {
+            color: #155724;
+            font-weight: 500;
+        }
+        .correct-answer-display {
+            font-weight: bold;
+            color: #28a745;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        .correct-answer-highlight, .tf-option.correct-answer-highlight, .multi-choice-option.correct-answer-highlight {
+            background-color: #d4edda !important;
+            border: 1px solid #c3e6cb !important;
+            border-radius: 4px;
+            padding: 4px;
+        }
+        .correct-answer-highlight {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+        }
+        .centered-title {
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="timer-container">
+            <span class="timer-display">20:00</span>
+            <div class="timer-controls">
+                <button id="timer-toggle-btn" title="Pause/Resume Timer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>
+                </button>
+                <button id="timer-reset-btn" title="Reset Timer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                </button>
+            </div>
+        </div>
+        <a href="https://t.me/REALEXAMIELTS" target="_blank" class="telegram-link">
+            REAL EXAM IELTS
+        </a>
+    </div>
+
+    <div class="main-container" id="main-container">
+        <div id="passage-header-container">
+            <div id="part-header-1" class="part-header">
+                <p><strong>Part 1</strong></p>
+                <p>Read the text and answer <strong>Questions 1-13.</strong></p>
+            </div>
+        </div>
+        <div class="panels-container">
+            <div class="passage-panel" id="passage-panel">
+                <div id="passage-text-1" class="reading-passage">
+                    <h2 class="text-center">Tunnelling under the Thames</h2>
+                    <p><strong>A</strong> At the beginning of the 19th century, the port of London was the busiest in the world. Cargoes that had travelled thousands of miles and survived all the hazards of the sea were unloaded on the banks of the Thames, only for their owners to discover that the most frustrating portion of their journey lay ahead. Consignments intended for the southern parts of Britain had to be lifted onto horse carts, pulled through the docks and across London Bridge, built in the 12th century and as impractical as its early date implies. By 1820, London Bridge had become the centre of the world's largest traffic jam.</p>
+                    <p><strong>B</strong> It was an intolerable situation, and it was clear that if private enterprise could build another crossing closer to the docks, there would be good money to be made in tolls paid by users. Another bridge was out of the question, as this would deny sailing ships access to the city centre and ambitious men turned their thoughts to tunnelling beneath the Thames instead. This was not such an obvious idea as it might appear. Although increasing demand for coal had meant a great many tunnels had been dug in mines in Britain, working methods remained primitive. Tunnels were dug by men with simple tools, by candlelight. However, in 1807, a group of businessmen set themselves up as the Thames Archway Company. Their ambition was to tunnel below the Thames, but there was little to guide them as there had been no previous attempt to do this. Their chief engineer was Richard Trevithick, designer of the world's first high-pressure steam engine. His men made progress at the beginning, but then things began to go disastrously wrong, with muddy soil pouring into the tunnel. Eventually, the Thames Archway Company had had enough. Its funds were exhausted, Trevithick was sick from exposure to the river water, and its efforts had proved only that a passage under the river exceeded the limits of contemporary mining technology.</p>
+                    <p><strong>C</strong> At that time, the only machines used in mines were pumps. It took a man of genius to recognise that a different sort of machine was needed, a machine that could prevent the roof and walls of a tunnel from collapsing. This man was Marc Brunel, a Frenchman who had become one of the most prominent engineers in Britain. Not long after the failure of the Thames Archway Company, Brunel saw a rotten piece of wood lying on the riverbank. Examining the wood through a magnifying glass, he observed it was infested with something that looked like a worm. Brunel realised that as it tunnelled through the wood, it would push chewed wood into its mouth and digest it, then excrete a hard substance that lined the new tunnel. Brunel realised that the worm's digging technique could be adapted to produce a new way of tunnelling. His realisation led him to invent a device that has been used in one form or another in most major tunnels built since – the tunnelling shield. It consisted of a heavy iron frame that could be pushed forward a few inches at a time. The front of the frame was made up of a series of iron frames that could be folded back to allow miners to dig the ground ahead. Behind these frames was a wall consisting of a series of iron plates pressed against the tunnel face and supported on a set of horizontal wooden planks, that would prevent the face from collapsing. It was a complex and rather cumbersome machine and not easy to use, but it seemed that it would protect the miners from the worst of the river's water. Brunel's team carefully examined earth samples taken from beneath the riverbed, and subsequently decided to dig the tunnel close to the muddy river bottom, where he could expect to find clay. This would be a more solid and safe substance to dig through than the sand that was found deeper down.</p>
+                    <p><strong>D</strong> Brunel began work on his tunnel in 1825, but the problems of such an operation soon became apparent. Although the shield itself worked well, water began to drip into the tunnel. This was more of an annoyance than a danger while the pump was working, but this machine proved unreliable and sometimes failed altogether. When the pump broke down, work had to stop as the tunnel quickly flooded. There were occasions when the miners had to abandon their tools and flee for their lives. Even when Brunel's men were able to work, they had to run the constant risk of the pumps failing. They also complained of frequent headaches and dizziness, caused by the poor air quality. The air underground was dirty and stale, contaminated due to the lack of an adequate ventilation system. There were lighting problems too. Illuminating the tunnels by candlelight was a constant challenge. Lamps give off only a very weak glow, and there were a number of accidents because the miners could not see what they were doing. Lastly, a number of Brunel's miners walked off the job because they could not tolerate the excessive temperatures that developed in the cramped conditions underground.</p>
+                    <p><strong>E</strong> Despite all these setbacks, the tunnel finally emerged on the opposite river bank on August 12, 1841. Brunel's triumph, however, was only partial. The small payment per person made by the thousands of visitors who flocked to see the marvel hardly paid even a penny per foot of the tunnel's construction costs. Brunel had gone bankrupt long before the project was completed, and the government loan he had required to complete the project had to be paid back with interest. As a result, there was not enough funding to make it accessible to horse-drawn vehicles, as intended. Instead, the passageways were filled with souvenir sellers and entertainers. In the end, the tunnel was closed two years later, used at night, before it was finally closed entirely and fell into dereliction for decades.</p>
+                    <p><strong>F</strong> It was only when the underground railway came to London in the 1880s that the Thames Tunnel found and achieved a measure of real usefulness. It was bought in 1869 by the East London Railway, who found it to be in such excellent condition that it was immediately pressed into service as a route for passenger trains heading east. The tunnel became, and remains, part of the London Underground network.</p>
+                </div>
+            </div>
+            <div class="resizer" id="resizer"></div>
+            <div class="questions-panel" id="questions-panel">
+                <div id="questions-1" class="question-set">
+                    <div class="questions-container">
+                        <div class="question" data-q-start="1" data-q-end="8">
+                            <div class="question-prompt">
+                                <p><strong>Questions 1–8</strong></p>
+                                <p>In boxes 1–8 on your answer sheet, write:</p>
+                                <ul>
+                                    <li><strong>TRUE</strong> – if the statement agrees with the information given in Reading Passage 1</li>
+                                    <li><strong>FALSE</strong> – if the statement contradicts the information</li>
+                                    <li><strong>NOT GIVEN</strong> – if there is no information on this</li>
+                                </ul>
+                            </div>
+                            <div class="tf-question" data-q-start="1" data-q-end="1">
+                                <div class="tf-question-line"><span class="tf-question-number">1</span><span class="tf-question-text">In the early 19th century, the port of London was considered a safer destination than other ports.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q1" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q1" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                            <div class="tf-question" data-q-start="2" data-q-end="2">
+                                <div class="tf-question-line"><span class="tf-question-number">2</span><span class="tf-question-text">London Bridge provided quick access for cargo being sent to southern Britain.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q2" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q2" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                            <div class="tf-question" data-q-start="3" data-q-end="3">
+                                <div class="tf-question-line"><span class="tf-question-number">3</span><span class="tf-question-text">It was generally believed that a new river crossing would be profitable.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q3" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q3" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                            <div class="tf-question" data-q-start="4" data-q-end="4">
+                                <div class="tf-question-line"><span class="tf-question-number">4</span><span class="tf-question-text">Building a second bridge crossing was initially considered to be the best solution.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q4" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q4" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                            <div class="tf-question" data-q-start="5" data-q-end="5">
+                                <div class="tf-question-line"><span class="tf-question-number">5</span><span class="tf-question-text">It was believed that coal could be found under the River Thames.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q5" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q5" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                            <div class="tf-question" data-q-start="6" data-q-end="6">
+                                <div class="tf-question-line"><span class="tf-question-number">6</span><span class="tf-question-text">The Thames Archway Company was the first group to try tunnelling below the Thames.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q6" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q6" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q6" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                            <div class="tf-question" data-q-start="7" data-q-end="7">
+                                <div class="tf-question-line"><span class="tf-question-number">7</span><span class="tf-question-text">Some of Trevithick's men were injured during a mudslide at his tunnel.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q7" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q7" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q7" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                            <div class="tf-question" data-q-start="8" data-q-end="8">
+                                <div class="tf-question-line"><span class="tf-question-number">8</span><span class="tf-question-text">The Thames Archway Company ran out of money to finance the tunnel project.</span></div>
+                                <div class="tf-options"><label class="tf-option"><input type="radio" name="q8" value="TRUE"> TRUE</label><label class="tf-option"><input type="radio" name="q8" value="FALSE"> FALSE</label><label class="tf-option"><input type="radio" name="q8" value="NOT GIVEN"> NOT GIVEN</label></div>
+                            </div>
+                        </div>
+                        <div class="question" data-q-start="9" data-q-end="13">
+                            <div class="question-prompt">
+                                <p><strong>Questions 9–13</strong></p>
+                                <p>Complete the notes below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>
+                                <div style="text-align: center;"><strong>Marc Brunel's tunnel</strong></div>
+                                <p><strong>Preparing to build the tunnel</strong></p>
+                                <ul>
+                                    <li>Brunel noticed how a kind of <input type="text" class="answer-input" id="q9" placeholder="9"> made its tunnels in wood.</li>
+                                    <li>Brunel created a device called a tunnelling shield, to protect people working under the river.</li>
+                                    <li>Brunel planned to build a shallow tunnel so the earth would have a higher content of <input type="text" class="answer-input" id="q10" placeholder="10">.</li>
+                                </ul>
+                                <p><strong>Problems faced by miners</strong></p>
+                                <ul>
+                                    <li>There were frequent floods caused by mechanical breakdowns.</li>
+                                    <li>The miners suffered from <input type="text" class="answer-input" id="q11" placeholder="11"> because of pollution in the tunnels.</li>
+                                    <li>Lighting problems led to several <input type="text" class="answer-input" id="q12" placeholder="12">.</li>
+                                    <li>Some workers quit because of the high temperatures in the tunnel.</li>
+                                </ul>
+                                <p><strong>After the tunnel was finished</strong></p>
+                                <ul>
+                                    <li>The tunnel was finally completed in 1841.</li>
+                                    <li>Brunel did not have enough money to repay his debt to the <input type="text" class="answer-input" id="q13" placeholder="13">.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" onclick="previousQuestion()" id="prevBtn">‹</button>
+        <button class="nav-arrow" onclick="nextQuestion()" id="nextBtn">›</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav-row perScorableItem" aria-label="Questions">
+        <div class="footer__questionWrapper___1tZ46 selected multiple" role="tablist">
+            <button role="tab" class="footer__questionNo___3WNct" onclick="switchToPart(1)">
+                <span>
+                    <span aria-hidden="true" class="section-prefix">Part </span>
+                    <span class="sectionNr" aria-hidden="true">1</span>
+                    <span class="attemptedCount" aria-hidden="true">0 of 13</span>
+                </span>
+            </button>
+            <div class="footer__subquestionWrapper___9GgoP">
+                <button class="subQuestion scorable-item" onclick="goToQuestion(1)"><span class="sr-only">Question 1</span><span aria-hidden="true">1</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(2)"><span class="sr-only">Question 2</span><span aria-hidden="true">2</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(3)"><span class="sr-only">Question 3</span><span aria-hidden="true">3</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(4)"><span class="sr-only">Question 4</span><span aria-hidden="true">4</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(5)"><span class="sr-only">Question 5</span><span aria-hidden="true">5</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(6)"><span class="sr-only">Question 6</span><span aria-hidden="true">6</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(7)"><span class="sr-only">Question 7</span><span aria-hidden="true">7</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(8)"><span class="sr-only">Question 8</span><span aria-hidden="true">8</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(9)"><span class="sr-only">Question 9</span><span aria-hidden="true">9</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(10)"><span class="sr-only">Question 10</span><span aria-hidden="true">10</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(11)"><span class="sr-only">Question 11</span><span aria-hidden="true">11</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(12)"><span class="sr-only">Question 12</span><span aria-hidden="true">12</span></button>
+                <button class="subQuestion scorable-item" onclick="goToQuestion(13)"><span class="sr-only">Question 13</span><span aria-hidden="true">13</span></button>
+            </div>
+        </div>
+
+        <button id="deliver-button" aria-label="Review your answers" class="footer__deliverButton___3FM07">
+            <i class="fa fa fa-check" aria-hidden="true"></i>
+            <span>Check Answers</span>
+        </button>
+    </nav>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <div id="menu-highlight" class="context-menu-item" onclick="highlightText()">
+            Highlight
+        </div>
+        <div id="menu-note" class="context-menu-item" onclick="addNote()">
+            Note
+        </div>
+        <div id="menu-clear" class="context-menu-item" onclick="clearHighlight()">
+            Clear
+        </div>
+        <div id="menu-clear-all" class="context-menu-item" onclick="clearAllHighlights()">
+            Clear All
+        </div>
+    </div>
+
+    <div id="results-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeResultsModal()">&times;</button>
+            <h2>Results</h2>
+            <div class="results-summary">
+                <p>Score: <span id="results-score"></span> / 13</p>
+            </div>
+            <div id="results-details" class="results-details-container">
+                <!-- Results for each question will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- STATE VARIABLES ---
+        let currentPassage = 1;
+        let currentQuestion = 1;
+        let selectedRange = null;
+        let timeInSeconds = 1200;
+        let timerInterval;
+        let draggedItem = null;
+        let activeQuestionElement = null;
+        let selectedDragItem = null;
+
+        // --- DOM ELEMENTS ---
+        const timerDisplay = document.querySelector('.timer-display');
+        const timerToggleButton = document.getElementById('timer-toggle-btn');
+        const timerResetButton = document.getElementById('timer-reset-btn');
+        const deliverButton = document.getElementById('deliver-button');
+        const resizer = document.getElementById('resizer');
+        const passagePanel = document.getElementById('passage-panel');
+        const questionsPanel = document.getElementById('questions-panel');
+        const contextMenu = document.getElementById('contextMenu');
+
+        // --- ICON SVGs ---
+        const playIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>';
+        const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+        // --- ANSWERS ---
+        const correctAnswers = {
+            '1': 'NOT GIVEN', '2': 'FALSE', '3': 'TRUE', '4': 'FALSE', '5': 'NOT GIVEN', '6': 'TRUE', '7': 'NOT GIVEN', '8': 'TRUE',
+            '9': 'worm', '10': 'clay', '11': 'headaches', '12': 'accidents', '13': 'government'
+        };
+
+        const totalQuestions = 13;
+
+        // --- INITIALIZATION ---
+        function initialize() {
+            startTimer();
+            initializeDragAndDrop();
+            setupCheckboxLimits();
+            setupExampleHeading();
+            switchToPart(1); // Also calls goToQuestion(1) and updateNavigation
+            
+            document.body.addEventListener('input', updateAllIndicators);
+            document.body.addEventListener('change', updateAllIndicators);
+            deliverButton.addEventListener('click', checkAnswers);
+            timerToggleButton.addEventListener('click', toggleTimer);
+            timerResetButton.addEventListener('click', resetTimer);
+
+            // Add click listeners to question containers for navigation
+            document.querySelectorAll('[data-q-start]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const qNum = parseInt(el.dataset.qStart, 10);
+                    if (currentQuestion !== qNum) {
+                        goToQuestion(qNum);
+                    }
+                });
+            });
+
+            resizer.addEventListener('mousedown', initResize, false);
+            initializeContextMenu();
+        }
+
+        // --- CORE TEST LOGIC ---
+
+        function checkAnswers() {
+            // Disable all inputs to prevent changes
+            const allInputs = document.querySelectorAll('input, select, textarea');
+            allInputs.forEach(input => {
+                input.disabled = true;
+            });
+
+            // Disable submit button
+            deliverButton.disabled = true;
+            deliverButton.style.cursor = 'not-allowed';
+            
+            clearInterval(timerInterval);
+            let score = 0;
+            const resultsDetailsContainer = document.getElementById('results-details');
+            resultsDetailsContainer.innerHTML = '';
+
+            document.querySelectorAll('.correct, .incorrect, .correct-answer-highlight').forEach(el => {
+                el.classList.remove('correct', 'incorrect', 'correct-answer-highlight');
+            });
+            document.querySelectorAll('.correct-answer-display').forEach(el => el.remove());
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionKey = String(i);
+                const correctAnswer = correctAnswers[questionKey];
+                let userAnswer = '';
+                let isCorrect = false;
+                
+                let userAnswerDisplay = 'Not Answered';
+                const correctAnswerText = Array.isArray(correctAnswer) ? correctAnswer.join(' / ') : correctAnswer;
+
+                const textInput = document.getElementById(`q${i}`);
+                const radioGroup = document.querySelectorAll(`input[name="q${i}"][type="radio"]`);
+                
+                // Handle Text and Select Inputs
+                if (textInput && (textInput.tagName === 'INPUT' || textInput.tagName === 'SELECT')) {
+                    const element = textInput.closest('.matching-form-row') || textInput;
+                    userAnswer = textInput.value.trim();
+                    userAnswerDisplay = userAnswer || 'Not Answered';
+
+                    if (textInput.tagName === 'SELECT') {
+                        isCorrect = userAnswer === correctAnswer;
+                    } else {
+                        isCorrect = Array.isArray(correctAnswer) ?
+                            correctAnswer.some(ans => userAnswer.toLowerCase() === ans.toLowerCase()) :
+                            userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+                    }
+                    
+                    if (isCorrect) {
+                        score++;
+                        element.classList.add('correct');
+                    } else {
+                        element.classList.add('incorrect');
+                        const correctAnswerSpan = document.createElement('span');
+                        correctAnswerSpan.className = 'correct-answer-display';
+                        correctAnswerSpan.innerHTML = `&nbsp;➜&nbsp;<span class="correct-answer-highlight">${correctAnswerText}</span>`;
+                        textInput.parentNode.insertBefore(correctAnswerSpan, textInput.nextSibling);
+                    }
+                }
+                // Handle Radio Button Inputs (T/F, MCQs)
+                else if (radioGroup.length > 0) {
+                    const questionContainer = radioGroup[0].closest('.tf-question') || radioGroup[0].closest('.multi-choice-question');
+                    const checkedRadio = document.querySelector(`input[name="q${i}"]:checked`);
+
+                    if (checkedRadio) {
+                        userAnswer = checkedRadio.value;
+                        userAnswerDisplay = userAnswer;
+                        isCorrect = userAnswer === correctAnswer;
+
+                        const userLabel = checkedRadio.closest('.tf-option, .multi-choice-option');
+                        if (userLabel) {
+                            userLabel.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        }
+                    }
+
+                    if (isCorrect) {
+                        score++;
+                    } else {
+                        if (questionContainer){
+                            const correctOptionEl = questionContainer.querySelector(`input[value="${correctAnswerText}"]`);
+                            if (correctOptionEl) {
+                                const correctLabel = correctOptionEl.closest('.tf-option, .multi-choice-option');
+                                if (correctLabel) {
+                                    correctLabel.classList.add('correct-answer-highlight');
+                                }
+                            }
+                        }
+                    }
+                }
+                 
+                // For showing results in the modal
+                 const resultRow = `
+                    <div class="result-row ${isCorrect ? '' : 'incorrect'}">
+                        <span class="q-num">${i}</span>
+                        <span class="user-ans">${userAnswerDisplay}</span>
+                        <span class="correct-ans">${correctAnswerText}</span>
+                    </div>`;
+                resultsDetailsContainer.innerHTML += resultRow;
+                
+                // Update nav button color
+                const navButton = document.querySelector(`.subQuestion[onclick="goToQuestion(${i})"]`);
+                if (navButton) {
+                    navButton.classList.remove('answered', 'active');
+                    navButton.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            }
+
+            document.getElementById('results-score').textContent = score;
+            document.getElementById('results-modal').classList.remove('hidden');
+        }
+
+        function getUserAnswer(qNum) {
+            const textInput = document.getElementById(`q${qNum}`);
+            const radioInput = document.querySelector(`input[name="q${qNum}"]:checked`);
+            const dropZone = document.querySelector(`.drop-zone[data-q-start="${qNum}"]`);
+
+            if (textInput) { // Handles <input type="text"> and <select>
+                return { value: textInput.value, text: textInput.value || 'N/A' };
+            }
+            if (radioInput) {
+                return { value: radioInput.value, text: radioInput.value };
+            }
+            if (dropZone) {
+                const droppedItem = dropZone.querySelector('.drag-item');
+                return { 
+                    value: droppedItem ? droppedItem.dataset.value : null, 
+                    text: droppedItem ? droppedItem.textContent.trim() : 'N/A' 
+                };
+            }
+            return { value: null, text: 'N/A' };
+        }
+
+        function displayCorrectAnswer(qNum, correctAnswer) {
+            // Handle radio button questions by highlighting the correct label
+            const correctRadioInput = document.querySelector(`input[name="q${qNum}"][value="${correctAnswer}"]`);
+            if (correctRadioInput) {
+                const parentOption = correctRadioInput.closest('.tf-option, .multi-choice-option');
+                if (parentOption) {
+                    parentOption.classList.add('correct-answer-highlight');
+                    return;
+                }
+            }
+
+            // Handle text inputs, select dropdowns, and others by showing the answer next to them
+            const inputEl = document.getElementById(`q${qNum}`);
+            if (inputEl) {
+                const displaySpan = document.createElement('span');
+                displaySpan.className = 'correct-answer-display';
+                displaySpan.textContent = ` ✓ ${correctAnswer}`;
+                inputEl.insertAdjacentElement('afterend', displaySpan);
+                return; // Done
+            }
+            
+            // Fallback for questions identified by a container (e.g., some T/F/NG questions)
+            const element = findQuestionElement(qNum);
+            if (element) {
+                const displaySpan = document.createElement('span');
+                displaySpan.className = 'correct-answer-display';
+                displaySpan.textContent = ` ✓ ${correctAnswer}`;
+                const itemContainer = element.querySelector('.tf-question-text');
+                if (itemContainer) {
+                     itemContainer.appendChild(displaySpan);
+                } else {
+                     element.appendChild(displaySpan);
+                }
+            }
+        }
+        
+        function findQuestionElement(qNum) {
+             return document.querySelector(`[data-q-start="${qNum}"]`);
+        }
+
+        function addResultToModal(qNum, userAnswer, correctAnswer, isCorrect) {
+            const resultsDetails = document.getElementById('results-details');
+            const row = document.createElement('div');
+            row.className = 'result-row';
+            if (!isCorrect) {
+                row.classList.add('incorrect');
+            }
+            row.innerHTML = `
+                <span class="q-num">${qNum}</span>
+                <span class="user-ans">${userAnswer}</span>
+                <span class="correct-ans">${correctAnswer}</span>
+            `;
+            resultsDetails.appendChild(row);
+        }
+
+        function showResultsModal() {
+            document.getElementById('results-modal').classList.remove('hidden');
+        }
+
+        window.closeResultsModal = function() {
+            document.getElementById('results-modal').classList.add('hidden');
+        }
+        
+        function disableInputs() {
+            deliverButton.innerHTML = `<span>Checked! View Results.</span>`;
+            deliverButton.removeEventListener('click', checkAnswers);
+            deliverButton.onclick = showResultsModal;
+
+            document.querySelectorAll('input, select').forEach(el => {
+                el.disabled = true;
+                 if (el.matches('input[type=radio], input[type=checkbox]')) {
+                     el.style.cursor = 'not-allowed';
+                     el.parentElement.style.cursor = 'not-allowed';
+                 }
+            });
+            document.querySelectorAll('.drag-item').forEach(el => {
+                el.setAttribute('draggable', 'false');
+                el.style.cursor = 'default';
+            });
+            document.querySelectorAll('.drop-zone').forEach(el => {
+                el.classList.add('disabled');
+            });
+        }
+
+        function checkValue(userValue, correctValue) {
+            if (userValue === null || userValue === undefined) return false;
+            const formattedUserValue = userValue.trim().toLowerCase();
+            if (Array.isArray(correctValue)) {
+                return correctValue.map(v => v.toLowerCase()).includes(formattedUserValue);
+            } else {
+                return formattedUserValue === String(correctValue).toLowerCase();
+            }
+        }
+
+        function markQuestion(qNum, isCorrect) {
+            const subQuestionBtn = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+            subQuestionBtn?.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            const elementsToMark = [
+                document.querySelector(`.tf-question[data-q-start="${qNum}"]`),
+                document.querySelector(`.multi-choice-question[data-q-start="${qNum}"]`),
+                document.querySelector(`.matching-question-item[data-q-start="${qNum}"]`),
+                document.querySelector(`.drop-zone[data-q-start="${qNum}"]`),
+                document.getElementById(`q${qNum}`),
+                document.querySelector(`input[name="q${qNum}"]:checked`)?.closest('.tf-option'),
+                document.querySelector(`input[name="q${qNum}"]:checked`)?.closest('.multi-choice-option')
+            ];
+            
+            elementsToMark.forEach(el => {
+                if (el) el.classList.add(isCorrect ? 'correct' : 'incorrect');
+            });
+        }
+
+        function switchToPart(partNumber, goToQ = null) {
+            currentPassage = 1;
+
+            // Hide all passages and questions
+            document.querySelectorAll('.reading-passage, .question-set, .part-header').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Show the correct passage, questions, and header
+            document.getElementById(`passage-text-1`).classList.remove('hidden');
+            document.getElementById(`questions-1`).classList.remove('hidden');
+            document.getElementById(`part-header-1`).classList.remove('hidden');
+
+            // Update bottom navigation 'selected' state
+            document.querySelectorAll('.footer__questionWrapper___1tZ46').forEach((wrapper) => {
+                wrapper.classList.add('selected');
+            });
+
+            // Go to the specified question or the first question of the part
+            const firstQuestionOfPart = {1: 1};
+            goToQuestion(goToQ !== null ? goToQ : firstQuestionOfPart[1]);
+        }
+        
+        function goToQuestion(questionNumber) {
+            // Prevent unnecessary recursion: if already at the right question, do nothing
+            if (currentQuestion === questionNumber && currentPassage === 1) {
+                return;
+            }
+
+            currentQuestion = questionNumber;
+            currentPassage = 1;
+
+            if (activeQuestionElement) {
+                activeQuestionElement.classList.remove('active-question', 'active-input');
+            }
+
+            let targetEl = document.querySelector(`[data-q-start="${questionNumber}"]`);
+
+            if (targetEl) {
+                activeQuestionElement = targetEl;
+                 if (targetEl.matches('input[type="text"]') || targetEl.matches('select')) {
+                     targetEl.classList.add('active-input');
+                 } else {
+                     targetEl.classList.add('active-question');
+                 }
+                 scrollIntoViewIfNeeded(targetEl);
+            } else {
+                 const pMatch = document.querySelector(`.paragraph-matching-question select[id="q${questionNumber}"]`);
+                 if(pMatch) {
+                    activeQuestionElement = pMatch;
+                    pMatch.classList.add('active-input');
+                    scrollIntoViewIfNeeded(pMatch);
+                 }
+            }
+
+            updateNavigation();
+        }
+        
+        // --- UI & NAVIGATION ---
+
+        function updateNavigation() {
+            const navButtons = document.querySelectorAll('.subQuestion');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            const activeNav = document.querySelector(`.subQuestion[onclick="goToQuestion(${currentQuestion})"]`);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+
+            const inputs = document.querySelectorAll('.answer-input, .drop-zone.filled, .summary-drop-zone.filled');
+            inputs.forEach(input => input.classList.remove('active-input'));
+            
+            const activeInput = document.getElementById(`q${currentQuestion}`);
+            if (activeInput) {
+                activeInput.classList.add('active-input');
+                if (typeof activeInput.focus === 'function') {
+                    activeInput.focus();
+                }
+            } else {
+                const activeQuestionBlock = document.querySelector(`[data-q-start="${currentQuestion}"]`);
+                if (activeQuestionBlock) {
+                    const firstInput = activeQuestionBlock.querySelector('input, select');
+                    if(firstInput) {
+                        firstInput.classList.add('active-input');
+                         if (typeof firstInput.focus === 'function') {
+                            firstInput.focus();
+                        }
+                    }
+                }
+            }
+        }
+        
+        function selectDragItem(item) {
+            if (selectedDragItem) {
+                selectedDragItem.classList.remove('selected');
+            }
+            selectedDragItem = item;
+            if (selectedDragItem) {
+                selectedDragItem.classList.add('selected');
+            }
+        }
+        
+        window.nextQuestion = () => currentQuestion < totalQuestions && goToQuestion(currentQuestion + 1);
+        window.previousQuestion = () => currentQuestion > 1 && goToQuestion(currentQuestion - 1);
+
+        function updateAllIndicators() {
+            updateAttemptedCount(1, 1, 13);
+            updateAnsweredNav();
+        }
+        
+        function updateAnsweredNav() {
+            const navButtons = document.querySelectorAll('.subQuestion');
+            navButtons.forEach(btn => {
+                const qNum = parseInt(btn.textContent, 10);
+                if (isQuestionAnswered(qNum)) {
+                    btn.classList.add('answered');
+                } else {
+                    btn.classList.remove('answered');
+                }
+            });
+        }
+        
+        function isQuestionAnswered(qNum) {
+            const textInput = document.getElementById(`q${qNum}`);
+            if (textInput && (textInput.value.trim() !== '' || (textInput.classList.contains('drop-zone') && textInput.children.length > 0))) {
+                return true;
+            }
+            const radio = document.querySelector(`input[name="q${qNum}"]:checked`);
+            if (radio) {
+                return true;
+            }
+            const checkbox = document.querySelector(`input[name="q${qNum}"]:checked`);
+            if (checkbox) {
+                return true;
+            }
+            return false;
+        }
+
+        function scrollIntoViewIfNeeded(element) {
+            const panel = element.closest('.questions-panel, .passage-panel');
+            const panelRect = panel.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+            if (elementRect.top < panelRect.top || elementRect.bottom > panelRect.bottom) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // --- DRAG AND DROP ---
+        
+        function initializeDragAndDrop() {
+            document.querySelectorAll('.drag-item').forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('click', () => selectDragItem(item));
+            });
+            document.querySelectorAll('.drop-zone, .drag-options-container').forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('dragleave', handleDragLeave);
+                zone.addEventListener('drop', handleDrop);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedItem = e.target;
+            setTimeout(() => e.target.classList.add('dragging'), 0);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedItem = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            const targetZone = e.currentTarget;
+            if (draggedItem && draggedItem.dataset.dndGroup === targetZone.dataset.dndGroup) {
+                targetZone.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetZone = e.currentTarget;
+            targetZone.classList.remove('drag-over');
+
+            if (!draggedItem || draggedItem.dataset.dndGroup !== targetZone.dataset.dndGroup) {
+                return;
+            }
+
+            const sourceZone = draggedItem.parentElement;
+            if (sourceZone === targetZone) return; // Prevent dropping on itself
+
+            const existingItemInTarget = targetZone.classList.contains('drop-zone') 
+                ? targetZone.querySelector('.drag-item') 
+                : null;
+
+            if (targetZone.classList.contains('drop-zone')) {
+                Array.from(targetZone.childNodes).forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        node.remove();
+                    }
+                });
+            }
+
+            if (existingItemInTarget) {
+                sourceZone.appendChild(existingItemInTarget);
+            }
+            
+            targetZone.appendChild(draggedItem);
+            targetZone.classList.add('filled');
+
+            if (sourceZone.classList.contains('drop-zone') && !sourceZone.querySelector('.drag-item')) {
+                 sourceZone.classList.remove('filled');
+                 const qNum = sourceZone.dataset.qStart;
+                 sourceZone.innerText = qNum;
+            }
+            
+            updateAllIndicators();
+        }
+        
+        // --- MISC HELPERS ---
+        
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeInSeconds--;
+                const minutes = Math.floor(timeInSeconds / 60);
+                const seconds = timeInSeconds % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                if (timeInSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "Time's up!";
+                }
+            }, 1000);
+            timerToggleButton.innerHTML = pauseIcon;
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerToggleButton.innerHTML = playIcon;
+        }
+
+        function toggleTimer() {
+            if (timerToggleButton.innerHTML.includes('M6 19h4V5H6v14z')) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
+            timeInSeconds = 1200;
+            updateTimerDisplay();
+            startTimer();
+            timerToggleButton.innerHTML = pauseIcon;
+        }
+        
+        function setupCheckboxLimits() {
+            // No grouped-checkbox questions in this test.
+        }
+
+        function setupExampleHeading() {
+            const exampleBox = document.querySelector('.example-box');
+            if(exampleBox){
+                const title = document.createElement('p');
+                title.style.fontWeight = 'bold';
+                title.textContent = 'List of Statements';
+            }
+        }
+        
+        function initResize(e) {
+            e.preventDefault();
+            const startX = e.clientX;
+            const startWidth = passagePanel.offsetWidth;
+            
+            const doDrag = (e) => {
+                const newWidth = startWidth + e.clientX - startX;
+                if (newWidth > 200 && (document.body.clientWidth - newWidth - resizer.offsetWidth) > 200) {
+                    passagePanel.style.flex = `0 0 ${newWidth}px`;
+                }
+            };
+            const stopDrag = () => {
+                window.removeEventListener('mousemove', doDrag, false);
+                window.removeEventListener('mouseup', stopDrag, false);
+            };
+            
+            window.addEventListener('mousemove', doDrag, false);
+            window.addEventListener('mouseup', stopDrag, false);
+        }
+        
+        // --- CONTEXT MENU (Highlighting) ---
+        
+        function initializeContextMenu() {
+            const panels = [passagePanel, questionsPanel];
+            let highlightBtn = null;
+            let removeHighlightBtn = null;
+            let highlightTarget = null;
+
+            function removeFloatingButtons() {
+                if (highlightBtn && highlightBtn.parentNode) highlightBtn.parentNode.removeChild(highlightBtn);
+                if (removeHighlightBtn && removeHighlightBtn.parentNode) removeHighlightBtn.parentNode.removeChild(removeHighlightBtn);
+                highlightBtn = null;
+                removeHighlightBtn = null;
+                highlightTarget = null;
+            }
+
+            function showHighlightButtonForSelection() {
+                const selection = window.getSelection();
+                if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
+                    const range = selection.getRangeAt(0);
+                    if (panels.some(panel => panel.contains(range.commonAncestorContainer))) {
+                        const selectionParentHighlight = range.commonAncestorContainer.nodeType === Node.TEXT_NODE
+                            ? range.commonAncestorContainer.parentElement?.closest('.highlight')
+                            : range.commonAncestorContainer.closest?.('.highlight');
+
+                        if (selectionParentHighlight && removeHighlightBtn && highlightTarget === selectionParentHighlight) {
+                            return;
+                        }
+
+                        removeFloatingButtons();
+                        highlightBtn = document.createElement('button');
+                        highlightBtn.textContent = 'Highlight';
+                        highlightBtn.style.position = 'absolute';
+                        highlightBtn.style.zIndex = 9999;
+                        highlightBtn.style.background = '#ffe066';
+                        highlightBtn.style.border = '1px solid #aaa';
+                        highlightBtn.style.padding = '8px 16px';
+                        highlightBtn.style.borderRadius = '4px';
+                        highlightBtn.style.cursor = 'pointer';
+                        highlightBtn.style.fontSize = '16px';
+                        highlightBtn.style.touchAction = 'manipulation';
+                        const rect = range.getBoundingClientRect();
+                        const spaceAbove = rect.top;
+                        const btnTop = spaceAbove < 45 ? window.scrollY + rect.bottom + 10 : window.scrollY + rect.top - 40;
+                        const btnLeft = Math.min(
+                            Math.max(5, window.scrollX + rect.left),
+                            window.scrollX + document.documentElement.clientWidth - 100
+                        );
+                        highlightBtn.style.left = `${btnLeft}px`;
+                        highlightBtn.style.top = `${btnTop}px`;
+                        document.body.appendChild(highlightBtn);
+                        const doHighlight = function(ev) {
+                            ev.preventDefault();
+                            const span = document.createElement('span');
+                            span.className = 'highlight';
+                            span.style.background = '#ffe066';
+                            span.appendChild(range.extractContents());
+                            range.insertNode(span);
+                            removeFloatingButtons();
+                            window.getSelection().removeAllRanges();
+                        };
+                        highlightBtn.addEventListener('touchend', doHighlight);
+                        highlightBtn.addEventListener('click', doHighlight);
+                    } else {
+                        removeFloatingButtons();
+                    }
+                } else {
+                    removeFloatingButtons();
+                }
+            }
+
+            document.addEventListener('mouseup', () => {
+                setTimeout(showHighlightButtonForSelection, 10);
+            });
+
+            // Text selection made via touch (dragging the native selection handles)
+            // does not reliably fire 'mouseup', so also react to touchend and to
+            // selectionchange (debounced, since it fires continuously while dragging).
+            document.addEventListener('touchend', () => {
+                setTimeout(showHighlightButtonForSelection, 10);
+            });
+
+            let selectionChangeTimer = null;
+            document.addEventListener('selectionchange', () => {
+                clearTimeout(selectionChangeTimer);
+                selectionChangeTimer = setTimeout(showHighlightButtonForSelection, 300);
+            });
+
+            panels.forEach(panel => {
+                panel.addEventListener('click', (e) => {
+                    const highlightEl = e.target.closest('.highlight');
+                    if (highlightEl) {
+                        if (removeHighlightBtn && highlightTarget === highlightEl) return;
+                        removeFloatingButtons();
+                        removeHighlightBtn = document.createElement('button');
+                        removeHighlightBtn.textContent = 'Remove Highlight';
+                        removeHighlightBtn.style.position = 'absolute';
+                        removeHighlightBtn.style.zIndex = 9999;
+                        removeHighlightBtn.style.background = '#ffb3b3';
+                        removeHighlightBtn.style.border = '1px solid #aaa';
+                        removeHighlightBtn.style.padding = '8px 16px';
+                        removeHighlightBtn.style.borderRadius = '4px';
+                        removeHighlightBtn.style.cursor = 'pointer';
+                        removeHighlightBtn.style.fontSize = '16px';
+                        removeHighlightBtn.style.touchAction = 'manipulation';
+                        const rect = highlightEl.getBoundingClientRect();
+                        const btnLeft = Math.min(
+                            Math.max(5, window.scrollX + rect.left),
+                            window.scrollX + document.documentElement.clientWidth - 150
+                        );
+                        removeHighlightBtn.style.left = `${btnLeft}px`;
+                        removeHighlightBtn.style.top = `${window.scrollY + rect.top - 40}px`;
+                        document.body.appendChild(removeHighlightBtn);
+                        highlightTarget = highlightEl;
+                        const doRemoveHighlight = function(ev) {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            const parent = highlightTarget.parentNode;
+                            while (highlightTarget.firstChild) {
+                                parent.insertBefore(highlightTarget.firstChild, highlightTarget);
+                            }
+                            parent.removeChild(highlightTarget);
+                            parent.normalize();
+                            removeFloatingButtons();
+                        };
+                        removeHighlightBtn.addEventListener('touchend', doRemoveHighlight);
+                        removeHighlightBtn.addEventListener('click', doRemoveHighlight);
+                    }
+                });
+            });
+
+            document.addEventListener('scroll', removeFloatingButtons, true);
+            const maybeDismissFloatingButtons = (e) => {
+                setTimeout(() => {
+                    if ((removeHighlightBtn && removeHighlightBtn.contains(e.target)) || (highlightBtn && highlightBtn.contains(e.target))) {
+                        return;
+                    }
+                    if (e.target.closest('.highlight')) return;
+                    removeFloatingButtons();
+                }, 0);
+            };
+            document.addEventListener('mousedown', maybeDismissFloatingButtons);
+            document.addEventListener('touchstart', maybeDismissFloatingButtons);
+        }
+
+        function closeContextMenu() {
+            contextMenu.style.display = 'none';
+            selectedRange = null;
+        }
+
+        function unwrapElement(element) {
+            const parent = element.parentNode;
+            if (!parent) return;
+            while (element.firstChild) {
+                parent.insertBefore(element.firstChild, element);
+            }
+            parent.removeChild(element);
+            parent.normalize();
+        }
+
+        window.highlightText = () => {
+            if (selectedRange && !selectedRange.collapsed) {
+                const span = document.createElement('span');
+                span.className = 'highlight';
+                span.appendChild(selectedRange.extractContents());
+                selectedRange.insertNode(span);
+            }
+            closeContextMenu();
+            window.getSelection().removeAllRanges();
+        };
+
+        window.addNote = () => {
+            const note = prompt('Enter your note:');
+            if (note && selectedRange && !selectedRange.collapsed) {
+                const span = document.createElement('span');
+                span.className = 'comment-highlight';
+                const tooltip = document.createElement('span');
+                tooltip.className = 'comment-tooltip';
+                tooltip.textContent = note;
+                span.appendChild(selectedRange.extractContents());
+                span.appendChild(tooltip);
+                selectedRange.insertNode(span);
+            }
+            closeContextMenu();
+            window.getSelection().removeAllRanges();
+        };
+
+        window.clearHighlight = () => {
+             const elementToClear = contextMenu.targetElementForClear;
+             if (elementToClear) {
+                 unwrapElement(elementToClear);
+             }
+             closeContextMenu();
+             window.getSelection().removeAllRanges();
+        };
+        
+        window.clearAllHighlights = () => {
+            document.querySelectorAll('.highlight, .comment-highlight').forEach(unwrapElement);
+            closeContextMenu();
+            window.getSelection().removeAllRanges();
+        };
+
+        function updateAttemptedCount(part, startQ, endQ) {
+            let answeredCount = 0;
+            for (let i = startQ; i <= endQ; i++) {
+                if (isQuestionAnswered(i)) {
+                    answeredCount++;
+                }
+            }
+            const partHeader = document.querySelector(`.footer__questionNo___3WNct[onclick="switchToPart(${part})"]`);
+            if (partHeader) {
+                const countSpan = partHeader.querySelector('.attemptedCount');
+                if (countSpan) {
+                     countSpan.textContent = `${answeredCount} of ${endQ - startQ + 1}`;
+                }
+            }
+        }
+
+        // --- GLOBAL FUNCTION EXPOSURE ---
+        window.nextQuestion = nextQuestion;
+        window.previousQuestion = previousQuestion;
+        window.goToQuestion = goToQuestion;
+        window.switchToPart = switchToPart;
+        window.closeResultsModal = closeResultsModal;
+        window.highlightText = highlightText;
+        window.addNote = addNote;
+        window.clearHighlight = clearHighlight;
+        window.clearAllHighlights = clearAllHighlights;
+
+        // --- START THE APP ---
+        initialize();
+    });
+    </script>
+</body>
+</html>
